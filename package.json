@@ -1,0 +1,21 @@
+{
+  "name": "syntypests",
+  "author": "Joe Desmond",
+  "version": "1.0.0",
+  "description": "A modification of the SynTypes extension for WinDbg",
+  "main": "index.js",
+  "engines": {
+    "node": "22"
+  },
+  "scripts": {
+    "build": "npm run compile && npm run bootstrap",
+    "compile": "ncc build src/index.ts -o . --target es2023 --minify",
+    "bootstrap": "shx cat bootstrap.js index.js > index2.js && shx mv index2.js index.js"
+  },
+  "license": "ISC",
+  "devDependencies": {
+    "@vercel/ncc": "0.38.3",
+    "shx": "0.4.0",
+    "typescript": "5.8.3"
+  }
+}
