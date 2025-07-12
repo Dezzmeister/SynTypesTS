@@ -55,4 +55,9 @@ After you define a type table, you can query it and inspect the types you've def
 dx -r1 Debugger.Utility.Analysis.SynTypesTS.TypeTables
 ```
 
-TODO: Instantiate types
+## TODOs
+
+ - Lazy type instantiation (instantiation is eager at the moment)
+ - String types
+ - Validation of flexible array members
+ - Unions

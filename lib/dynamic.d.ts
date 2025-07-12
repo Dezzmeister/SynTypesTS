@@ -1,7 +1,28 @@
+/*
+ * This file is part of windbg-ts-template.
+ * Copyright (C) 2025  Joe Desmond
+ *
+ * windbg-ts-template is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * any later version.
+ *
+ * windbg-ts-template is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with windbg-ts-template.  If not, see <https://www.gnu.org/licenses/>.
+ */
 // This file contains type declarations for dynamic objects in the Debugger namespace
 // and augmentations for built-in types which are not fully documented in JsProvider.d.ts.
 // The Debugger objects given here seem to be provided by WinDbg itself, and so are effectively
 // static.
+
+// These two symbols are created in global scope by bootstrap.js
+declare const __dirname: never;
+declare const module: never;
 
 interface SymbolConstructor {
     readonly metadataDescriptor: unique symbol;

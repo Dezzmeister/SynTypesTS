@@ -1,5 +1,7 @@
 /**
- * Modifications by Joe Desmond <joe@obama69.com>
+ * This file is derived from Microsoft's JsProvider64.d.ts.
+ * Original copyright: (c) 2017 Microsoft Corporation (MIT License)
+ * Modifications by Joe Desmond <joe.github@obama69.com>, 2025
  * 
  * Some of the types in this file have been narrowed, particularly where it would not
  * be possible to achieve the same result with declaration merging.
