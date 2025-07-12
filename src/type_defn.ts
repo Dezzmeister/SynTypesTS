@@ -1,4 +1,5 @@
 import { PLATFORM_ALIGN } from "./consts";
+import type { FlexArrayValue } from "./valueclasses/FlexArrayValue";
 
 export type TypeDefns = readonly TypeDefn[];
 export type TypeDefn = TypeAlias | PrimitiveDefn | StructDefn | ArrayDefn | PointerDefn;
@@ -10,6 +11,8 @@ type TypeAlias = string;
 // an enum name and hit the Shift key multiple times
 export const signed = (1 << 0);
 export const float = (1 << 1);
+export const bool = (1 << 2);
+export const char = (1 << 3);
 
 type PrimitiveDefn = {
     kind: "primitive";
@@ -35,8 +38,7 @@ export type StaticArrayDefn = {
     numElems: number;
 };
 
-// TODO: Type
-export type FlexSizeFn = (arr: unknown) => number;
+export type FlexSizeFn = (arr: FlexArrayValue) => number;
 type FlexArrayDefn = {
     kind: "flex_array";
     elemType: TypeDefn;
@@ -51,34 +53,21 @@ type PointerDefn = {
 };
 
 export const builtins: TypeDefns = Object.freeze([
-    primitive("bool_1", 1, 1),
-    primitive("bool_4", 1, 4),
-    primitive("bool_8", 1, 8),
-    primitive("uchar_1", 1, 1),
-    primitive("uchar_4", 1, 4),
-    primitive("uchar_8", 1, 8),
-    primitive("char_1", 1, 1, signed),
-    primitive("char_4", 1, 4, signed),
-    primitive("char_8", 1, 8, signed),
-    primitive("ushort_2", 2, 2),
-    primitive("ushort_4", 2, 4),
-    primitive("ushort_8", 2, 8),
-    primitive("short_2", 2, 2, signed),
-    primitive("short_4", 2, 4, signed),
-    primitive("short_8", 2, 8, signed),
-    primitive("uint_4", 4, 4),
-    primitive("uint_8", 4, 8),
-    primitive("int_4", 4, 4, signed),
-    primitive("int_8", 4, 8, signed),
-    primitive("ulong", 8, 8),
-    primitive("long", 8, 8, signed),
+    primitive("bool", 1, 1, bool),
+    primitive("u8", 1, 1),
+    primitive("i8", 1, 1, signed),
+    primitive("u16", 2, 2),
+    primitive("i16", 2, 2, signed),
+    primitive("u32", 4, 4),
+    primitive("i32", 4, 4, signed),
+    primitive("u64", 8, 8),
+    primitive("i64", 8, 8, signed),
     primitive("size", 8, 8),
-    primitive("wchar_2", 2, 2),
-    primitive("wchar_4", 2, 4),
-    primitive("wchar_8", 2, 8),
-    primitive("float_4", 4, 4, signed | float),
-    primitive("float_8", 4, 8, signed | float),
-    primitive("double", 8, 8, signed | float),
+    primitive("uchar", 1, 1, char),
+    primitive("char", 1, 1, signed | char),
+    primitive("wchar", 2, 2, char),
+    primitive("f32", 4, 4, signed | float),
+    primitive("f64", 8, 8, signed | float),
     primitive("void", 0, 0)
 ]);
 

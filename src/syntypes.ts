@@ -1,7 +1,23 @@
 import { EvalContext } from "./eval_context";
 import { log } from "./logging";
-import { builtins, signed, float, primitive, struct, array, ptr } from "./type_defn";
 import { TypeTable } from "./type_table";
+import { builtins, signed, float, primitive, struct, array, ptr } from "./type_defn";
+import { FlexArray } from "./typeclasses/FlexArray";
+import { Pointer } from "./typeclasses/Pointer";
+import { Primitive } from "./typeclasses/Primitive";
+import { StaticArray } from "./typeclasses/StaticArray";
+import { Struct } from "./typeclasses/Struct";
+import { FlexArrayValue } from "./valueclasses/FlexArrayValue";
+import { PointerValue } from "./valueclasses/PointerValue";
+import {
+    IntValue,
+    FloatValue,
+    BoolValue,
+    CharValue,
+    VoidValue
+ } from "./valueclasses/PrimitiveValue";
+import { StaticArrayValue } from "./valueclasses/StaticArrayValue";
+import { StructValue } from "./valueclasses/StructValue";
 
 export class SynTypesTS {
     readonly #typeTables: Record<string, TypeTable> = {};
@@ -48,7 +64,21 @@ export class SynTypesTS {
                 struct,
                 array,
                 ptr,
-                builtins
+                builtins,
+                FlexArray,
+                Pointer,
+                Primitive,
+                StaticArray,
+                Struct,
+                FlexArrayValue,
+                PointerValue,
+                IntValue,
+                FloatValue,
+                BoolValue,
+                CharValue,
+                VoidValue,
+                StaticArrayValue,
+                StructValue
             );
 
             const defns = context.__eval(jsSource);

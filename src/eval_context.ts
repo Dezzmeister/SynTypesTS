@@ -1,4 +1,20 @@
 import type { builtins, signed, float, primitive, struct, array, ptr, TypeDefns } from "./type_defn";
+import type { FlexArray } from "./typeclasses/FlexArray";
+import type { Pointer } from "./typeclasses/Pointer";
+import type { Primitive } from "./typeclasses/Primitive";
+import type { StaticArray } from "./typeclasses/StaticArray";
+import type { Struct } from "./typeclasses/Struct";
+import type { FlexArrayValue } from "./valueclasses/FlexArrayValue";
+import type { PointerValue } from "./valueclasses/PointerValue";
+import type {
+    IntValue,
+    FloatValue,
+    BoolValue,
+    CharValue,
+    VoidValue
+ } from "./valueclasses/PrimitiveValue";
+import type { StaticArrayValue } from "./valueclasses/StaticArrayValue";
+import type { StructValue } from "./valueclasses/StructValue";
 
 export class EvalContext {
     readonly #signed: typeof signed;
@@ -8,6 +24,20 @@ export class EvalContext {
     readonly #array: typeof array;
     readonly #ptr: typeof ptr;
     readonly #builtins: typeof builtins;
+    readonly #FlexArray: typeof FlexArray;
+    readonly #Pointer: typeof Pointer;
+    readonly #Primitive: typeof Primitive;
+    readonly #StaticArray: typeof StaticArray;
+    readonly #Struct: typeof Struct;
+    readonly #FlexArrayValue: typeof FlexArrayValue;
+    readonly #PointerValue: typeof PointerValue;
+    readonly #IntValue: typeof IntValue;
+    readonly #FloatValue: typeof FloatValue;
+    readonly #BoolValue: typeof BoolValue;
+    readonly #CharValue: typeof CharValue;
+    readonly #VoidValue: typeof VoidValue;
+    readonly #StaticArrayValue: typeof StaticArrayValue;
+    readonly #StructValue: typeof StructValue;
     #typeDefnsOut: TypeDefns | null = null;
 
     constructor(
@@ -17,7 +47,21 @@ export class EvalContext {
         _struct: typeof struct,
         _array: typeof array,
         _ptr: typeof ptr,
-        _builtins: typeof builtins
+        _builtins: typeof builtins,
+        _FlexArray: typeof FlexArray,
+        _Pointer: typeof Pointer,
+        _Primitive: typeof Primitive,
+        _StaticArray: typeof StaticArray,
+        _Struct: typeof Struct,
+        _FlexArrayValue: typeof FlexArrayValue,
+        _PointerValue: typeof PointerValue,
+        _IntValue: typeof IntValue,
+        _FloatValue: typeof FloatValue,
+        _BoolValue: typeof BoolValue,
+        _CharValue: typeof CharValue,
+        _VoidValue: typeof VoidValue,
+        _StaticArrayValue: typeof StaticArrayValue,
+        _StructValue: typeof StructValue
     ) {
         this.#signed = _signed;
         this.#float = _float;
@@ -26,6 +70,20 @@ export class EvalContext {
         this.#array = _array;
         this.#ptr = _ptr;
         this.#builtins = _builtins;
+        this.#FlexArray = _FlexArray;
+        this.#Pointer = _Pointer;
+        this.#Primitive = _Primitive;
+        this.#StaticArray = _StaticArray;
+        this.#Struct = _Struct;
+        this.#FlexArrayValue = _FlexArrayValue;
+        this.#PointerValue = _PointerValue;
+        this.#IntValue = _IntValue;
+        this.#FloatValue = _FloatValue;
+        this.#BoolValue = _BoolValue;
+        this.#CharValue = _CharValue;
+        this.#VoidValue = _VoidValue;
+        this.#StaticArrayValue = _StaticArrayValue;
+        this.#StructValue = _StructValue;
     }
 
     // TODO: Verify types
@@ -43,6 +101,20 @@ export class EvalContext {
         const array = this.#array;
         const ptr = this.#ptr;
         const builtins = this.#builtins;
+        const FlexArray = this.#FlexArray;
+        const Pointer = this.#Pointer;
+        const Primitive = this.#Primitive;
+        const StaticArray = this.#StaticArray;
+        const Struct = this.#Struct;
+        const FlexArrayValue = this.#FlexArrayValue;
+        const PointerValue = this.#PointerValue;
+        const IntValue = this.#IntValue;
+        const FloatValue = this.#FloatValue;
+        const BoolValue = this.#BoolValue;
+        const CharValue = this.#CharValue;
+        const VoidValue = this.#VoidValue;
+        const StaticArrayValue = this.#StaticArrayValue;
+        const StructValue = this.#StructValue;
         const ReturnTypeDefns = this.ReturnTypeDefns.bind(this);
 
         (() => {
