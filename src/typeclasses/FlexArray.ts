@@ -1,7 +1,7 @@
 import type { FlexSizeFn } from "../type_defn";
 import type { TypeTable } from "../type_table";
-import { FlexArrayValue } from "../valueclasses/FlexArrayValue";
-import { Value } from "../valueclasses/Value";
+import { createFlexArrayValue } from "../valueclasses/FlexArrayValue";
+import type { Value } from "../valueclasses/Value";
 import type { DefinedType } from "./DefinedType";
 
 export class FlexArray implements DefinedType {
@@ -34,7 +34,7 @@ export class FlexArray implements DefinedType {
     }
 
     Instantiate(addr: host.Int64, name?: string, parent?: Value): Value {
-        return new FlexArrayValue(addr, this, name, parent);
+        return createFlexArrayValue(addr, this, name, parent);
     }
 
     get __name(): string {

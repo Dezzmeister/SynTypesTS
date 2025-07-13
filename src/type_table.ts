@@ -6,6 +6,7 @@ import { Pointer } from "./typeclasses/Pointer";
 import { Primitive } from "./typeclasses/Primitive";
 import { StaticArray } from "./typeclasses/StaticArray";
 import { FieldType, NamedField, Struct } from "./typeclasses/Struct";
+import { evalIfStruct } from "./valueclasses/StructValue";
 import { Value } from "./valueclasses/Value";
 
 export class TypeTable {
@@ -13,6 +14,7 @@ export class TypeTable {
     readonly #primitives: Record<string, Primitive> = {};
     readonly #structs: Record<string, Struct> = {};
     readonly #staticArrays: Record<string, StaticArray> = {};
+    readonly #values: Record<string, Value> = {};
 
     constructor(
         name: string
@@ -22,6 +24,7 @@ export class TypeTable {
         const primitives = this.#primitives;
         const structs = this.#structs;
         const staticArrays = this.#staticArrays;
+        const values = this.#values;
 
         Object.setPrototypeOf(this.#primitives, {
             toString(): string {
@@ -36,6 +39,11 @@ export class TypeTable {
         Object.setPrototypeOf(this.#staticArrays, {
             toString(): string {
                 return `Count: ${Object.keys(staticArrays).length}`;
+            }
+        });
+        Object.setPrototypeOf(this.#values, {
+            toString(): string {
+                return `Count: ${Object.keys(values).length}`;
             }
         });
     }
@@ -56,6 +64,14 @@ export class TypeTable {
         return this.#staticArrays;
     }
 
+    get Values(): Record<string, Value> {
+        for (const name in this.#values) {
+            evalIfStruct(this.#values[name]);
+        }
+
+        return this.#values;
+    }
+
     Instantiate(addr: host.Int64, typename: string, name: string): Value {
         const defn = this.__lookupTypename(typename);
 
@@ -63,7 +79,12 @@ export class TypeTable {
             throw new Error(`Type "${typename}" does not exist`);
         }
 
-        return defn.Instantiate(addr, name);
+        const value = defn.Instantiate(addr, name);
+        value.__eval();
+
+        this.#values[name] = value;
+
+        return value;
     }
 
     __addTypeDefn(defn: TypeDefn): void {
@@ -254,6 +275,15 @@ export class TypeTable {
 
     toString(): string {
         return this.#name;
+    }
+
+    get [Symbol.metadataDescriptor]() {
+        return {
+            Instantiate: {
+                PreferShow: true,
+                Help: "Instantiate(addr, typename, valname) - evaluates the given memory address as if it had the given type"
+            }
+        };
     }
 }
 

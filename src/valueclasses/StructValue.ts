@@ -51,17 +51,35 @@ export class StructValue implements Value {
         this.Parent = parent;
 
         checkAlign(addr, type.__align);
+    }
+
+    get __fields(): readonly FieldValue[] {
+        this.__eval();
+
+        return this.#fields;
+    }
+
+    toString(): string {
+        return this.Name;
+    }
+
+    __eval(): void {
+        for (const fieldName in this.#fields) {
+            delete this[fieldName];
+        }
+
+        this.#fields.length = 0;
 
         let offset = 0;
 
-        for (const field of type.__fields) {
+        for (const field of this.Type.__fields) {
             const shift = offset % field.Type.Align;
 
             if (shift !== 0) {
                 offset += (field.Type.Align - shift);
             }
 
-            const fieldAddr = addr.add(offset);
+            const fieldAddr = this.Addr.add(offset);
             const value = new FieldValue(
                 fieldAddr,
                 field.Type.Type,
@@ -69,23 +87,25 @@ export class StructValue implements Value {
                 this,
                 field.Type.Type.Instantiate(
                     fieldAddr,
-                    `${name}.${field.Name}`,
+                    `${this.Name}.${field.Name}`,
                     this
                 )
             );
 
             this.#fields.push(value);
             this[field.Name] = value.Value;
+            evalIfStruct(value.Value);
 
             offset += field.Type.Size;
         }
     }
+}
 
-    get __fields(): readonly FieldValue[] {
-        return this.#fields;
-    }
-
-    toString(): string {
-        return this.Name;
+// This is necessary because WinDbg enumerates the own properties of an object
+// before evaluating them, so if we evaluate the struct when one of its properties
+// is accessed, WinDbg won't show the field names that we add to the struct value.
+export function evalIfStruct(value: Value): void {
+    if (value instanceof StructValue) {
+        value.__eval();
     }
 }

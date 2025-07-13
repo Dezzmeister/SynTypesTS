@@ -1,6 +1,6 @@
 import type { TypeTable } from "../type_table";
-import { StaticArrayValue } from "../valueclasses/StaticArrayValue";
-import { Value } from "../valueclasses/Value";
+import { createStaticArrayValue } from "../valueclasses/StaticArrayValue";
+import type { Value } from "../valueclasses/Value";
 import type { DefinedType } from "./DefinedType";
 
 export class StaticArray implements DefinedType {
@@ -42,7 +42,7 @@ export class StaticArray implements DefinedType {
     }
 
     Instantiate(addr: host.Int64, name?: string, parent?: Value): Value {
-        return new StaticArrayValue(addr, this, name, parent);
+        return createStaticArrayValue(addr, this, name, parent);
     }
 
     get __name(): string {

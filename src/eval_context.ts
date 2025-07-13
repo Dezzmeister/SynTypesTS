@@ -1,4 +1,13 @@
-import type { builtins, signed, float, primitive, struct, array, ptr, TypeDefns } from "./type_defn";
+import type {
+    builtins,
+    signed,
+    float,
+    primitive,
+    struct,
+    array,
+    ptr,
+    TypeDefns
+} from "./type_defn";
 import type { FlexArray } from "./typeclasses/FlexArray";
 import type { Pointer } from "./typeclasses/Pointer";
 import type { Primitive } from "./typeclasses/Primitive";
@@ -15,6 +24,11 @@ import type {
  } from "./valueclasses/PrimitiveValue";
 import type { StaticArrayValue } from "./valueclasses/StaticArrayValue";
 import type { StructValue } from "./valueclasses/StructValue";
+import type {
+    FlexStringValue,
+    StaticStringValue,
+    PointerStringValue
+} from "./valueclasses/StringValue";
 
 export class EvalContext {
     readonly #signed: typeof signed;
@@ -30,13 +44,16 @@ export class EvalContext {
     readonly #StaticArray: typeof StaticArray;
     readonly #Struct: typeof Struct;
     readonly #FlexArrayValue: typeof FlexArrayValue;
+    readonly #FlexStringValue: typeof FlexStringValue;
     readonly #PointerValue: typeof PointerValue;
+    readonly #PointerStringValue: typeof PointerStringValue;
     readonly #IntValue: typeof IntValue;
     readonly #FloatValue: typeof FloatValue;
     readonly #BoolValue: typeof BoolValue;
     readonly #CharValue: typeof CharValue;
     readonly #VoidValue: typeof VoidValue;
     readonly #StaticArrayValue: typeof StaticArrayValue;
+    readonly #StaticStringValue: typeof StaticStringValue;
     readonly #StructValue: typeof StructValue;
     #typeDefnsOut: TypeDefns | null = null;
 
@@ -54,13 +71,16 @@ export class EvalContext {
         _StaticArray: typeof StaticArray,
         _Struct: typeof Struct,
         _FlexArrayValue: typeof FlexArrayValue,
+        _FlexStringValue: typeof FlexStringValue,
         _PointerValue: typeof PointerValue,
+        _PointerStringValue: typeof PointerStringValue,
         _IntValue: typeof IntValue,
         _FloatValue: typeof FloatValue,
         _BoolValue: typeof BoolValue,
         _CharValue: typeof CharValue,
         _VoidValue: typeof VoidValue,
         _StaticArrayValue: typeof StaticArrayValue,
+        _StaticStringValue: typeof StaticStringValue,
         _StructValue: typeof StructValue
     ) {
         this.#signed = _signed;
@@ -76,13 +96,16 @@ export class EvalContext {
         this.#StaticArray = _StaticArray;
         this.#Struct = _Struct;
         this.#FlexArrayValue = _FlexArrayValue;
+        this.#FlexStringValue = _FlexStringValue;
         this.#PointerValue = _PointerValue;
+        this.#PointerStringValue = _PointerStringValue;
         this.#IntValue = _IntValue;
         this.#FloatValue = _FloatValue;
         this.#BoolValue = _BoolValue;
         this.#CharValue = _CharValue;
         this.#VoidValue = _VoidValue;
         this.#StaticArrayValue = _StaticArrayValue;
+        this.#StaticStringValue = _StaticStringValue;
         this.#StructValue = _StructValue;
     }
 
@@ -107,13 +130,16 @@ export class EvalContext {
         const StaticArray = this.#StaticArray;
         const Struct = this.#Struct;
         const FlexArrayValue = this.#FlexArrayValue;
+        const FlexStringValue = this.#FlexStringValue;
         const PointerValue = this.#PointerValue;
+        const PointerStringValue = this.#PointerStringValue;
         const IntValue = this.#IntValue;
         const FloatValue = this.#FloatValue;
         const BoolValue = this.#BoolValue;
         const CharValue = this.#CharValue;
         const VoidValue = this.#VoidValue;
         const StaticArrayValue = this.#StaticArrayValue;
+        const StaticStringValue = this.#StaticStringValue;
         const StructValue = this.#StructValue;
         const ReturnTypeDefns = this.ReturnTypeDefns.bind(this);
 

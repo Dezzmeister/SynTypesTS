@@ -5,4 +5,6 @@ export interface Value {
     get Type(): DefinedType;
     readonly Name?: string;
     readonly Parent?: Value;
+
+    __eval(): void;
 }

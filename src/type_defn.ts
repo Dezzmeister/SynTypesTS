@@ -1,5 +1,6 @@
 import { PLATFORM_ALIGN } from "./consts";
 import type { FlexArrayValue } from "./valueclasses/FlexArrayValue";
+import type { FlexStringValue } from "./valueclasses/StringValue";
 
 export type TypeDefns = readonly TypeDefn[];
 export type TypeDefn = TypeAlias | PrimitiveDefn | StructDefn | ArrayDefn | PointerDefn;
@@ -38,7 +39,7 @@ export type StaticArrayDefn = {
     numElems: number;
 };
 
-export type FlexSizeFn = (arr: FlexArrayValue) => number;
+export type FlexSizeFn = (arr: FlexArrayValue | FlexStringValue) => number;
 type FlexArrayDefn = {
     kind: "flex_array";
     elemType: TypeDefn;

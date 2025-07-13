@@ -1,6 +1,6 @@
 import { PLATFORM_ALIGN, POINTER_WIDTH } from "../consts";
 import type { TypeTable } from "../type_table";
-import { PointerValue } from "../valueclasses/PointerValue";
+import { createPointerValue } from "../valueclasses/PointerValue";
 import type { Value } from "../valueclasses/Value";
 import type { DefinedType } from "./DefinedType";
 import { FlexArray } from "./FlexArray";
@@ -41,7 +41,7 @@ export class Pointer implements DefinedType {
     }
 
     Instantiate(addr: host.Int64, name?: string, parent?: Value): Value {
-        return new PointerValue(addr, this, name, parent);
+        return createPointerValue(addr, this, name, parent);
     }
 
     get __name(): string {

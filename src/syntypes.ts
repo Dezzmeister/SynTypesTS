@@ -1,7 +1,15 @@
 import { EvalContext } from "./eval_context";
 import { log } from "./logging";
 import { TypeTable } from "./type_table";
-import { builtins, signed, float, primitive, struct, array, ptr } from "./type_defn";
+import {
+    builtins,
+    signed,
+    float,
+    primitive,
+    struct,
+    array,
+    ptr
+} from "./type_defn";
 import { FlexArray } from "./typeclasses/FlexArray";
 import { Pointer } from "./typeclasses/Pointer";
 import { Primitive } from "./typeclasses/Primitive";
@@ -18,6 +26,11 @@ import {
  } from "./valueclasses/PrimitiveValue";
 import { StaticArrayValue } from "./valueclasses/StaticArrayValue";
 import { StructValue } from "./valueclasses/StructValue";
+import {
+    FlexStringValue,
+    PointerStringValue,
+    StaticStringValue
+} from "./valueclasses/StringValue";
 
 export class SynTypesTS {
     readonly #typeTables: Record<string, TypeTable> = {};
@@ -71,13 +84,16 @@ export class SynTypesTS {
                 StaticArray,
                 Struct,
                 FlexArrayValue,
+                FlexStringValue,
                 PointerValue,
+                PointerStringValue,
                 IntValue,
                 FloatValue,
                 BoolValue,
                 CharValue,
                 VoidValue,
                 StaticArrayValue,
+                StaticStringValue,
                 StructValue
             );
 

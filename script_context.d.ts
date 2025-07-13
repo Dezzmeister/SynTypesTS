@@ -87,7 +87,7 @@ interface Value {
     readonly Parent?: Value;
 }
 
-type FlexSizeFn = (arr: FlexArrayValue) => number;
+type FlexSizeFn = (arr: FlexArrayValue | FlexStringValue) => number;
 
 declare class FlexArray implements DefinedType {
     private constructor();
@@ -158,7 +158,20 @@ declare class FlexArrayValue implements Value {
     readonly Name?: string;
     // This should always be a StructValue
     readonly Parent?: Value;
+    get __size(): number;
     [Symbol.iterator](): Generator<Value>;
+}
+
+declare class FlexStringValue implements Value {
+    private constructor();
+
+    get Addr(): host.Int64;
+    get Type(): FlexArray;
+    readonly Name?: string;
+    // This should always be a StructValue
+    readonly Parent?: Value;
+    get Value(): string;
+    get __size(): number;
 }
 
 declare class PointerValue implements Value {
@@ -168,7 +181,17 @@ declare class PointerValue implements Value {
     get Type(): Pointer;
     readonly Name?: string;
     readonly Parent?: Value;
-    get Pointee(): Value;
+    get Pointee(): Value | null;
+}
+
+declare class PointerStringValue implements Value {
+    private constructor();
+
+    get Addr(): host.Int64;
+    get Type(): Pointer;
+    readonly Name?: string;
+    readonly Parent?: Value;
+    get Pointee(): string | null;
 }
 
 declare class IntValue implements Value {
@@ -227,6 +250,16 @@ declare class StaticArrayValue implements Value {
     readonly Name?: string;
     readonly Parent?: Value;
     [Symbol.iterator](): Generator<Value>;
+}
+
+declare class StaticStringValue implements Value {
+    private constructor();
+
+    get Addr(): host.Int64;
+    get Type(): StaticArray;
+    readonly Name?: string;
+    readonly Parent?: Value;
+    get Value(): string;
 }
 
 declare class FieldValue {

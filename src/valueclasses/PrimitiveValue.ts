@@ -34,7 +34,7 @@ export class IntValue implements Value {
     readonly Name?: string;
     readonly Parent?: Value;
 
-    readonly #value: host.Int64;
+    #value?: host.Int64;
 
     constructor(
         addr: host.Int64,
@@ -48,16 +48,22 @@ export class IntValue implements Value {
         this.Parent = parent;
 
         checkAlign(addr, type.__align);
-
-        this.#value = readInt(addr, type);
     }
 
     get Value(): host.Int64 {
-        return this.#value;
+        return this.__eval();
     }
 
     toString(): string {
-        return `${this.#value.asNumber()}`;
+        const value = this.__eval();
+
+        return `${value.asNumber()}`;
+    }
+
+    __eval(): host.Int64 {
+        this.#value = readInt(this.Addr, this.Type);
+
+        return this.#value;
     }
 }
 
@@ -67,7 +73,7 @@ export class FloatValue implements Value {
     readonly Name?: string;
     readonly Parent?: Value;
 
-    readonly #value: number;
+    #value?: number;
 
     constructor(
         addr: host.Int64,
@@ -83,30 +89,39 @@ export class FloatValue implements Value {
         checkSize(type.__size);
         checkAlign(addr, type.__align);
 
+        if (type.__size !== 4 && type.__size !== 8) {
+            throw new Error("Primitive float must have size 4 or 8");
+        }
+
+    }
+
+    get Value(): number {
+        return this.__eval();
+    }
+
+    toString(): string {
+        return `${this.__eval()}`;
+    }
+
+    __eval(): number {
         const mem = host.memory.readMemoryValues(
-            addr,
-            type.__size,
+            this.Addr,
+            this.Type.__size,
             1,
             false
         );
 
         const view = new DataView(mem.buffer, mem.byteOffset, mem.byteLength);
 
-        if (type.__size == 4) {
+        if (this.Type.__size == 4) {
             this.#value = view.getFloat32(0, LITTLE_ENDIAN);
-        } else if (type.__size == 8) {
+        } else if (this.Type.__size == 8) {
             this.#value = view.getFloat32(0, LITTLE_ENDIAN);
         } else {
-            throw new Error(`Primitive float must have size 4 or 8`);
+            throw new Error("Primitive float must have size 4 or 8");
         }
-    }
 
-    get Value(): number {
         return this.#value;
-    }
-
-    toString(): string {
-        return `${this.#value}`;
     }
 }
 
@@ -116,7 +131,7 @@ export class BoolValue implements Value {
     readonly Name?: string;
     readonly Parent?: Value;
 
-    readonly #value: boolean;
+    #value?: boolean;
 
     constructor(
         addr: host.Int64,
@@ -130,16 +145,20 @@ export class BoolValue implements Value {
         this.Parent = parent;
 
         checkAlign(addr, type.__align);
-
-        this.#value = !!readInt(addr, type);
     }
 
     get Value(): boolean {
-        return this.#value;
+        return this.__eval();
     }
 
     toString(): string {
-        return `${this.#value}`;
+        return `${this.__eval()}`;
+    }
+
+    __eval(): boolean {
+        this.#value = !!readInt(this.Addr, this.Type);
+
+        return this.#value;
     }
 }
 
@@ -149,7 +168,7 @@ export class CharValue implements Value {
     readonly Name?: string;
     readonly Parent?: Value;
 
-    readonly #value: string;
+    #value?: string;
 
     constructor(
         addr: host.Int64,
@@ -169,10 +188,17 @@ export class CharValue implements Value {
     }
 
     get Value(): string {
-        return this.#value;
+        return this.__eval();
     }
 
     toString(): string {
+        return this.__eval();
+    }
+
+    __eval(): string {
+        const charAsInt = readInt(this.Addr, this.Type);
+        this.#value = String.fromCharCode(charAsInt.asNumber());
+
         return this.#value;
     }
 }
@@ -191,6 +217,8 @@ export class VoidValue implements Value {
         this.Type = type;
         this.Parent = parent;
     }
+
+    __eval(): void {}
 }
 
 function checkSize(size: number): asserts size is 1 | 2 | 4 | 8 {
